@@ -1,7 +1,10 @@
 package com.attendance.attendance_management.mapper;
 
+import com.attendance.attendance_management.dto.LeaveDto;
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.repository.UserRepository;
+import com.attendance.attendance_management.table.LeaveInfo;
+import com.attendance.attendance_management.table.UserInfo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -17,5 +20,12 @@ import java.util.List;
 public class UserMapper {
     private final UserRepository userRepository;
     private List<UserDto> userDto = new ArrayList<>();
-
+    public UserDto setDto(UserInfo userInfo) {
+      UserDto userDto1 =new UserDto();
+      userDto1.setUserId(userInfo.getUserId());
+      userDto1.setRoll(userInfo.getRoll());
+      userDto1.setName(userInfo.getName());
+      userDto1.setDepartment(userInfo.getDepartment());
+      return  userDto1;
+    }
 }

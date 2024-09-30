@@ -8,4 +8,6 @@ import java.util.List;
 
 @Repository
 public interface LeaveRepository extends JpaRepository<LeaveInfo,Long> {
+    List<LeaveInfo> findByLeaveDate(String date);
+
 }
