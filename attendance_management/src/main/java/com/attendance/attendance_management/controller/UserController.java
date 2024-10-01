@@ -2,10 +2,13 @@ package com.attendance.attendance_management.controller;
 
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController
@@ -16,9 +19,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping
     public List<UserDto> getUser() {
         return userService.getUser();
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken getcsrf(HttpServletRequest request)
+    {
+        return  (CsrfToken) request.getAttribute("_csrf");
     }
 
     @GetMapping("/id/{id}")
