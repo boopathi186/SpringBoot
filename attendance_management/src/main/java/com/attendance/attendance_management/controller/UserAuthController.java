@@ -16,13 +16,17 @@ public class UserAuthController {
     private final UserAuthService authService;
 
     @GetMapping("/register")
-    public List<UserAuth> getRegisterUser()
-    {
-          return  authService.getRegisterUser();
+    public List<UserAuth> getRegisterUser() {
+        return authService.getRegisterUser();
     }
+
     @PostMapping("/addregister")
-    public String  registerUser(@RequestBody UserAuth user)
-    {
+    public String registerUser(@RequestBody UserAuth user) {
         return authService.registerUser(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody UserAuth userAuth) {
+        return authService.verifyLogin(userAuth);
     }
 }

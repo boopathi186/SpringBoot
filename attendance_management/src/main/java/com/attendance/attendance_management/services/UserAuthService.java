@@ -3,33 +3,41 @@ package com.attendance.attendance_management.services;
 import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.table.UserAuth;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserAuthService implements UserDetailsService {
+public class UserAuthService {
     private final UserAuthRepository userAuthRepository;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final JwtService service;
+    private final AuthenticationManager authenticationManager;
 
     public String registerUser(UserAuth user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         userAuthRepository.save(user);
         return "Success";
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       UserAuth userAuth = userAuthRepository.findByUserName(username);
-       if(userAuth==null) {
-           throw new UsernameNotFoundException("User Not Found");
-       }
-       return new UserAuth(userAuth);
-    }
 
     public List<UserAuth> getRegisterUser() {
-       return userAuthRepository.findAll();
+
+        return userAuthRepository.findAll();
+    }
+
+    public String verifyLogin(UserAuth userAuth) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return service.getToken(userAuth.getUsername());
+        }
+        return "failed";
     }
 }

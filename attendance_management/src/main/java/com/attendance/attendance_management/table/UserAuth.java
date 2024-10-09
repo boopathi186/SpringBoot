@@ -29,9 +29,9 @@ public class UserAuth implements UserDetails {
     private String password;
 
     public UserAuth(UserAuth userAuth) {
-           this.userId=userAuth.userId;
-           this.userName=userAuth.userName;
-           this.password=userAuth.password;
+        this.userId = userAuth.userId;
+        this.userName = userAuth.userName;
+        this.password = userAuth.password;
     }
 
     @Override
@@ -41,12 +41,12 @@ public class UserAuth implements UserDetails {
 
     @Override
     public String getPassword() {
-        return  password;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return  userName;
+        return userName;
     }
 
     @Override
