@@ -49,7 +49,7 @@ public class UserController {
 
     @DeleteMapping("/id/{id}")
     public String getDelete(@PathVariable String id) {
-        userService.getDelete(Long.parseLong(id));
-        return "User Deleted";
+       return userService.getDelete(Long.parseLong(id));
+//        return "User Deleted";
     }
 }

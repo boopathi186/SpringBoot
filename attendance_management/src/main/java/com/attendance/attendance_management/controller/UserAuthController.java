@@ -3,11 +3,9 @@ package com.attendance.attendance_management.controller;
 import com.attendance.attendance_management.services.UserAuthService;
 import com.attendance.attendance_management.table.UserAuth;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.naming.InvalidNameException;
 import java.util.List;
 
 @RestController
@@ -26,7 +24,14 @@ public class UserAuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserAuth userAuth) {
+    public String login(@RequestBody UserAuth userAuth) throws InvalidNameException {
         return authService.verifyLogin(userAuth);
+    }
+
+
+    @DeleteMapping("/register/id/{id}")
+    public String getDelete(@PathVariable String id) {
+        return authService.getDelete(Long.parseLong(id));
+
     }
 }

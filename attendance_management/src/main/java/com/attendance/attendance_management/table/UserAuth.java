@@ -27,11 +27,14 @@ public class UserAuth implements UserDetails {
     private String userName;
     @Column(name = "password")
     private String password;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 
     public UserAuth(UserAuth userAuth) {
         this.userId = userAuth.userId;
         this.userName = userAuth.userName;
         this.password = userAuth.password;
+        this.isActive=userAuth.isActive;
     }
 
     @Override

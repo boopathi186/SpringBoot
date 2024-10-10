@@ -1,18 +1,16 @@
 package com.attendance.attendance_management.services;
 
-import com.attendance.attendance_management.dto.LeaveDto;
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.mapper.UserMapper;
 import com.attendance.attendance_management.repository.UserRepository;
-import com.attendance.attendance_management.table.LeaveInfo;
 import com.attendance.attendance_management.table.UserInfo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserInfo userInfo;
 
     public List<UserDto> getUser() {
         final List<UserDto> userDtoList = new ArrayList<>();
@@ -41,7 +40,7 @@ public class UserService {
 //        UserInfo userInfo = userRepository.findById(id).stream().findFirst().orElse(null);
 //        UserDto userDto = new UserDto();
 //        return  userDto;
-        Optional<UserInfo> userInfo= this.userRepository.findById(id);
+        Optional<UserInfo> userInfo = this.userRepository.findById(id);
         return userInfo.map(userMapper::setDto).orElse(null);
     }
 
@@ -69,8 +68,20 @@ public class UserService {
         return userDtoList;
     }
 
-    public void getDelete(final long id) {
-
-        this.userRepository.deleteById(id);
+    @Transactional
+    public String getDelete(final long id) {
+        Optional<UserInfo> userInfoOpt = userRepository.findById(id);
+        if (userInfoOpt.isPresent()) {
+            UserInfo userInfo = userInfoOpt.get();
+            if (!userInfo.getIsActive()) {
+                return "No match found";
+            } else {
+                userRepository.softDelete(id);
+                return "Deleted";
+            }
+        } else {
+            return "No match found";
+        }
     }
 }
+

@@ -3,7 +3,9 @@ package com.attendance.attendance_management.table;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
+@Component
 @Entity
 @Getter
 @Setter
@@ -19,5 +21,6 @@ public class UserInfo {
     private String roll;
     @Column(name = "department")
     private String department;
-
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 }

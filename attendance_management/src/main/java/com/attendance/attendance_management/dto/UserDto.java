@@ -15,4 +15,5 @@ public class UserDto {
     private String name;
     private String roll;
     private String department;
+    private  String isActive;
 }

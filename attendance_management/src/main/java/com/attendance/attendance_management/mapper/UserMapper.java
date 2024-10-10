@@ -26,6 +26,7 @@ public class UserMapper {
       userDto1.setRoll(userInfo.getRoll());
       userDto1.setName(userInfo.getName());
       userDto1.setDepartment(userInfo.getDepartment());
+//      userDto1.setIsActive(userInfo.ge());
       return  userDto1;
     }
 }

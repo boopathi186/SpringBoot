@@ -2,7 +2,6 @@ package com.attendance.attendance_management.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,7 @@ public class JwtService {
     private final String secretKey;
 
     @Value("${jwt.expiration}")
-    private long jwtExpirationMs;
+    private long jwtExpiration;
 
     public JwtService() {
         KeyGenerator keyGenerator;
@@ -40,12 +39,11 @@ public class JwtService {
 
     public String getToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-
         return Jwts.builder().claims()
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() +jwtExpirationMs)).and().signWith(getkey()).compact();
+                .expiration(new Date(System.currentTimeMillis() +jwtExpiration)).and().signWith(getkey()).compact();
 
     }
 
@@ -82,4 +80,5 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
 }
