@@ -2,7 +2,6 @@ package com.attendance.attendance_management.services;
 
 import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.table.UserAuth;
-import com.attendance.attendance_management.table.UserInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserAuthService {
     private final UserAuthRepository userAuthRepository;
+    private final JwtService jwtService;
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-    private final JwtService service;
     private final AuthenticationManager authenticationManager;
 
     public String registerUser(UserAuth user) {
@@ -34,16 +33,18 @@ public class UserAuthService {
         return userAuthRepository.findAll();
     }
 
-    @Transactional
     public String verifyLogin(UserAuth userAuth) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword()));
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword()));
         if (authentication.isAuthenticated()) {
-            return service.getToken(userAuth.getUsername());
+            if (userAuthRepository.findByUserName(userAuth.getUsername()).getIsActive())
+                return jwtService.getToken(userAuth.getUsername());
+            else {
+                return "No active";
+            }
         }
-        return "failed";
+        return "No authenticated";
     }
-
 
     @Transactional
     public String getDelete(final long id) {

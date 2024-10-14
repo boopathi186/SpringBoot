@@ -5,7 +5,6 @@ import com.attendance.attendance_management.table.UserAuth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.InvalidNameException;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class UserAuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserAuth userAuth) throws InvalidNameException {
+    public String login(@RequestBody UserAuth userAuth) {
         return authService.verifyLogin(userAuth);
     }
 
