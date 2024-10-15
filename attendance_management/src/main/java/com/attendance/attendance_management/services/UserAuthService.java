@@ -1,9 +1,14 @@
 package com.attendance.attendance_management.services;
 
+import com.attendance.attendance_management.dto.ApiResponse;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.InvalidException;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.UserNotFoundException;
 import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.table.UserAuth;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,23 +32,53 @@ public class UserAuthService {
         return "Success";
     }
 
-
-    public List<UserAuth> getRegisterUser() {
-
-        return userAuthRepository.findAll();
+    public ResponseEntity<ApiResponse<List<UserAuth>>> getRegisterUser() {
+        List<UserAuth> userAuth = userAuthRepository.findAll();
+        ApiResponse<List<UserAuth>> response =
+                new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(long id) {
+        UserAuth userAuth = userAuthRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+        ApiResponse<UserAuth> response =
+                new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+//    public String verifyLogin(UserAuth userAuth) {
+//        boolean isActive = userAuthRepository.findByUserName(userAuth.getUsername()).getIsActive();
+//        if (isActive) {
+//            Authentication authentication =
+//                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword()));
+//            if (authentication.isAuthenticated()) {
+//                return jwtService.getToken(userAuth.getUsername());
+//            }
+//        }
+//        return
+//    }
+
+
     public String verifyLogin(UserAuth userAuth) {
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword()));
-        if (authentication.isAuthenticated()) {
-            if (userAuthRepository.findByUserName(userAuth.getUsername()).getIsActive())
-                return jwtService.getToken(userAuth.getUsername());
-            else {
-                return "No active";
-            }
+
+        UserAuth user = userAuthRepository.findByUserName(userAuth.getUsername());
+        if (user == null) {
+            throw new UserNotFoundException("User not found with username: " + userAuth.getUsername());
         }
-        return "No authenticated";
+        if (!user.getIsActive()) {
+            throw new InvalidException("User account is inactive.");
+        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword())
+        );
+        if (authentication.isAuthenticated()) {
+            return jwtService.getToken(userAuth.getUsername());
+        }
+       // if(user.getPassword().equals(userAuthRepository.findByUserName(userAuth.getUsername()).getPassword()))
+        throw new InvalidException("Invalid username or password.");
     }
 
     @Transactional

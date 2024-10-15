@@ -1,19 +1,43 @@
 package com.attendance.attendance_management.exceptionhandler;
 
-import com.attendance.attendance_management.configure.SecurityConfig;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.attendance.attendance_management.dto.ApiResponse;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.InputMandatoryException;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.InvalidException;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(SecurityException.class)
-    public ResponseEntity<Object> handleException(SecurityException e)
-    {
-        return new ResponseEntity<>("Expired Token", HttpStatus.BAD_REQUEST) ;
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleUserNotFoundException(UserNotFoundException ex) {
+        return createApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidException(InvalidException ex) {
+        return createApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(InputMandatoryException.class)
+    public ResponseEntity<ApiResponse<String>> handleInputMandatoryException(InputMandatoryException ex) {
+        return createApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    private ResponseEntity<ApiResponse<String>> createApiResponse(HttpStatus status, String message) {
+        ApiResponse<String> response = new ApiResponse<>();
+        response.setCode(status.value());
+        response.setStatus("error");
+        response.setMessage(message);
+        response.setValidationErrors(null);
+        response.setRequestedTime(System.currentTimeMillis());
+        response.setExecutionTime("0 ms");
+        response.setResponse(null);
+        return new ResponseEntity<>(response, status);
+    }
 }

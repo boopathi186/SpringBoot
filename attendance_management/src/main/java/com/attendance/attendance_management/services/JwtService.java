@@ -1,7 +1,6 @@
 package com.attendance.attendance_management.services;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -20,8 +19,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${jwt.secret}")
-    private  String secretKey;
-
+    private String secretKey;
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
@@ -46,24 +44,27 @@ public class JwtService {
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration)).and()
                 .signWith(
-                        SignatureAlgorithm.HS256,secretKey
-//                      getkey()
-                        ).compact();
+                        SignatureAlgorithm.HS256, secretKey
+                ).compact();
 
     }
 
     private SecretKey getkey() {
         byte[] byteSec = Decoders.BASE64.decode(secretKey);
+        //System.out.println("decode  "+Keys.hmacShaKeyFor(byteSec));
         return Keys.hmacShaKeyFor(byteSec);   //to create secure sign key
     }
 
 
-    public String extractUserName(String token) {
+    public String extractUserName(String token)
+    {
+        //System.out.println("exname  "+extractClaim(token, Claims::getSubject));
         return extractClaim(token, Claims::getSubject);
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsTFunction) {
         Claims claims = extractAllClaims(token);
+     //   System.out.println("extractall  "+claims);
         return claimsTFunction.apply(claims);
     }
 
@@ -77,17 +78,21 @@ public class JwtService {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
+       // System.out.println("validate  " + (userName.equals(userDetails.getUsername()) && !isTokenExpired(token)));
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token){
-        if(extractExpiration(token).before(new Date())) {
-           throw new SecurityException("Token Expires ");
+    private boolean isTokenExpired(String token) {
+       // System.out.println("is expire " +extractExpiration(token).before(new Date()));
+        if (extractExpiration(token).before(new Date())) {
+            throw new SecurityException("Token Expires ");
         }
         return false;
     }
 
-    private Date extractExpiration(String token) {
+    private Date extractExpiration(String token)
+    {
+       // System.out.println("ex exp " + extractClaim(token, Claims::getExpiration));
         return extractClaim(token, Claims::getExpiration);
     }
 
