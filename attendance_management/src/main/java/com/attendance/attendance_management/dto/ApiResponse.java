@@ -17,6 +17,4 @@ public class ApiResponse<T> {
     private String executionTime;
     private T response;
 
-
-
 }

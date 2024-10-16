@@ -1,7 +1,6 @@
 package com.attendance.attendance_management.controller;
 
 import com.attendance.attendance_management.dto.ApiResponse;
-import com.attendance.attendance_management.exceptionhandler.customexceptions.InputMandatoryException;
 import com.attendance.attendance_management.exceptionhandler.customexceptions.InvalidException;
 import com.attendance.attendance_management.services.UserAuthService;
 import com.attendance.attendance_management.table.UserAuth;
@@ -22,13 +21,13 @@ public class UserAuthController {
     }
 
     @GetMapping("/register/id/{id}")
-    public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(@PathVariable String id) {
-        if (id.isEmpty()) {
-            throw new InputMandatoryException("input mandatory");
-        }
+    public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(@PathVariable Long id) {
+//        if (id == null) {
+//            throw new InputMandatoryException("input mandatory");
+//        }
         long l;
         try {
-            l = Long.parseLong(id);
+            l = Long.parseLong(String.valueOf(id));
         } catch (NumberFormatException e) {
             throw new InvalidException("invalid type");
         }

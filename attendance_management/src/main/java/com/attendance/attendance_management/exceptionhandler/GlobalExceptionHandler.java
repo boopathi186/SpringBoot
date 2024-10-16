@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.InputMismatchException;
+
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
@@ -24,10 +26,16 @@ public class GlobalExceptionHandler {
         return createApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(InputMismatchException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidException(InputMismatchException ex) {
+        return createApiResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     @ExceptionHandler(InputMandatoryException.class)
     public ResponseEntity<ApiResponse<String>> handleInputMandatoryException(InputMandatoryException ex) {
         return createApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
 
     private ResponseEntity<ApiResponse<String>> createApiResponse(HttpStatus status, String message) {
         ApiResponse<String> response = new ApiResponse<>();

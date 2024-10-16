@@ -1,5 +1,6 @@
 package com.attendance.attendance_management.services;
 
+import com.attendance.attendance_management.exceptionhandler.customexceptions.UserNotFoundException;
 import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.table.UserAuth;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class MyUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAuth userAuth = userAuthRepository.findByUserName(username);
         if (userAuth == null) {
-            throw new UsernameNotFoundException("User Not Found");
+            throw new UserNotFoundException("User Not Found");
         }
         return new UserAuth(userAuth);
     }

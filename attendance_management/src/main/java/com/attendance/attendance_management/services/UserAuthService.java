@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +34,12 @@ public class UserAuthService {
     }
 
     public ResponseEntity<ApiResponse<List<UserAuth>>> getRegisterUser() {
+
         List<UserAuth> userAuth = userAuthRepository.findAll();
         ApiResponse<List<UserAuth>> response =
                 new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
         return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
     public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(long id) {
@@ -44,11 +47,8 @@ public class UserAuthService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         ApiResponse<UserAuth> response =
                 new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 //    public String verifyLogin(UserAuth userAuth) {
 //        boolean isActive = userAuthRepository.findByUserName(userAuth.getUsername()).getIsActive();
 //        if (isActive) {
@@ -65,20 +65,31 @@ public class UserAuthService {
     public String verifyLogin(UserAuth userAuth) {
 
         UserAuth user = userAuthRepository.findByUserName(userAuth.getUsername());
-        if (user == null) {
-            throw new UserNotFoundException("User not found with username: " + userAuth.getUsername());
+        try {
+            if (user == null) {
+                throw new UserNotFoundException("User not found with username: " + userAuth.getUsername());
+            }
+            if (!user.getIsActive()) {
+                throw new InvalidException("User account is inactive.");
+            }
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+            if (!passwordEncoder.matches(userAuth.getPassword(), user.getPassword())) {
+                throw new InputMismatchException("Invalid username or password.");
+            }
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword())
+            );
+            if (authentication.isAuthenticated()) {
+                return jwtService.getToken(userAuth.getUsername());
+            }
+        } catch (UserNotFoundException e) {
+            throw new UserNotFoundException(e.getMessage());
+        } catch (InvalidException e) {
+            throw new InvalidException(e.getMessage());
+        } catch (InputMismatchException e) {
+            throw new InputMismatchException(e.getMessage());
         }
-        if (!user.getIsActive()) {
-            throw new InvalidException("User account is inactive.");
-        }
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword())
-        );
-        if (authentication.isAuthenticated()) {
-            return jwtService.getToken(userAuth.getUsername());
-        }
-       // if(user.getPassword().equals(userAuthRepository.findByUserName(userAuth.getUsername()).getPassword()))
-        throw new InvalidException("Invalid username or password.");
+        throw new InvalidException("internal error");
     }
 
     @Transactional
