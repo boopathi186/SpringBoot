@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class UserAuthService {
     private final UserAuthRepository userAuthRepository;
     private final JwtService jwtService;
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
 
     public String registerUser(UserAuth user) {
@@ -72,8 +72,8 @@ public class UserAuthService {
             if (!user.getIsActive()) {
                 throw new InvalidException("User account is inactive.");
             }
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-            if (!passwordEncoder.matches(userAuth.getPassword(), user.getPassword())) {
+
+            if (!encoder.matches(userAuth.getPassword(), user.getPassword())) {
                 throw new InputMismatchException("Invalid username or password.");
             }
             Authentication authentication = authenticationManager.authenticate(

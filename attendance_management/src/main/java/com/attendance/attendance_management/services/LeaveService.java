@@ -31,36 +31,36 @@ public class LeaveService {
         return leaveDtoList;
     }
 
-//    public LeaveDto getRecordById(final int id) {
+    //    public LeaveDto getRecordById(final int id) {
 //        final List<LeaveDto> leaveDtoList = getLeaveData();
 //       return leaveDtoList.stream()
 //                .filter(user -> user.getLeaveId()==(id)).findFirst().orElse(null);
 //
 //    }
-public LeaveDto getRecordById(final int id) {
-    Optional<LeaveInfo> leaveInfoOptional = leaveRepository.findById((long) id);
-    if (!leaveInfoOptional.isPresent()) {
-        return null;
+    public LeaveDto getRecordById(final int id) {
+        Optional<LeaveInfo> leaveInfoOptional = leaveRepository.findById((long) id);
+        if (!leaveInfoOptional.isPresent()) {
+            return null;
+        }
+        return leaveMapper.setDto(leaveInfoOptional.get());
     }
-    return leaveMapper.setDto(leaveInfoOptional.get());
-}
 
 
-//    public List<LeaveDto> getRecordByDate(final String date) {
+    //    public List<LeaveDto> getRecordByDate(final String date) {
 //        final List<LeaveDto> leaveDtoList = getLeaveData();
 //        return leaveDtoList.stream()
 //                .filter(user -> user.getLeaveDate().equals(date)).toList();
 //    }
-public List<LeaveDto> getRecordByDate(final String date) {
+    public List<LeaveDto> getRecordByDate(final String date) {
 
-    List<LeaveInfo> leaveInfoList = leaveRepository.findByLeaveDate(date);
-    List<LeaveDto> leaveDtoList = new ArrayList<>();
-    for (LeaveInfo leaveInfo : leaveInfoList) {
-        leaveDtoList.add(leaveMapper.setDto(leaveInfo));
+        List<LeaveInfo> leaveInfoList = leaveRepository.findByLeaveDate(date);
+        List<LeaveDto> leaveDtoList = new ArrayList<>();
+        for (LeaveInfo leaveInfo : leaveInfoList) {
+            leaveDtoList.add(leaveMapper.setDto(leaveInfo));
+        }
+
+        return leaveDtoList;
     }
-
-    return leaveDtoList;
-}
 
     public void addLeaveForm(final LeaveInfo leaveInfo) {
         this.leaveRepository.save(leaveInfo);
