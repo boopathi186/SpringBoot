@@ -1,6 +1,7 @@
 package com.attendance.attendance_management.table;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserAuth implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,7 @@ public class UserAuth implements UserDetails {
         this.password = userAuth.password;
         this.isActive=userAuth.isActive;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

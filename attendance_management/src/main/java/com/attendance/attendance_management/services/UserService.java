@@ -2,6 +2,7 @@ package com.attendance.attendance_management.services;
 
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.mapper.UserMapper;
+import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.repository.UserRepository;
 import com.attendance.attendance_management.table.UserInfo;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserInfo userInfo;
+    private final UserAuthRepository userAuthRepository;
 
     public List<UserDto> getUser() {
         final List<UserDto> userDtoList = new ArrayList<>();
@@ -83,5 +85,9 @@ public class UserService {
             return "No match found";
         }
     }
+
+//    public UserDto addUser(UserDto userDto) {
+//        UserInfo userInfo1 = this.userMapper.se
+//    }
 }
 

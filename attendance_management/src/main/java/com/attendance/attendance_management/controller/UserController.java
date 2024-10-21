@@ -2,6 +2,7 @@ package com.attendance.attendance_management.controller;
 
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.UserService;
+import com.attendance.attendance_management.table.UserAuth;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,12 @@ public class UserController {
     public UserDto getUserById(@PathVariable String id) {
         return userService.getUserById(Long.parseLong(id));
     }
+
+//    @PostMapping("/adduser")
+//    public UserDto  addUser(@RequestBody UserDto userDto)
+//    {
+//        return userService.addUser(userDto);
+//    }
 
     @GetMapping("/roll/{roll}")
     public List<UserDto> getUserByRoll(@PathVariable String roll) {
