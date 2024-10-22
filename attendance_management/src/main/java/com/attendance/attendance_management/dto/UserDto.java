@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,4 +18,22 @@ public class UserDto {
     private String roll;
     private String department;
     private  String isActive;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(userId, userDto.userId) &&
+                Objects.equals(name, userDto.name) &&
+                Objects.equals(roll, userDto.roll) &&
+                Objects.equals(department, userDto.department);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, name, roll, department);
+    }
+
+
 }

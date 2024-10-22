@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -30,8 +31,27 @@ class UserServiceTest {
 
     @Test
     void TestGetUser() {
-        userService.getUserByRoll("Teacher");
-        verify(userRepository).findByRoll("Teacher");
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(20L);
+        userInfo.setName("Michael Johnson");
+        userInfo.setRoll("teacher");
+        List<UserInfo> userInfoList = new ArrayList<>();
+        userInfoList.add(userInfo);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(20L);
+        userDto.setName("Michael Johnson");
+        userDto.setRoll("teacher");
+        List<UserDto> UserDtoList = new ArrayList<>();
+        UserDtoList.add(userDto);
+
+        when(userRepository.findAll()).thenReturn(userInfoList);
+        List<UserDto> actualUserDtoList = userService.getUser();
+        assertEquals(UserDtoList.size(), actualUserDtoList.size());
+        assertEquals(UserDtoList.getFirst().getUserId(), actualUserDtoList.getFirst().getUserId());
+        assertEquals(UserDtoList.getFirst().getName(), actualUserDtoList.getFirst().getName());
+        assertEquals(UserDtoList.getFirst().getRoll(), actualUserDtoList.getFirst().getRoll());
+        verify(userRepository,times(1)).findAll();
     }
 
     @Test
@@ -51,7 +71,7 @@ class UserServiceTest {
         assertEquals("Michael Johnson", result.getName());
         assertEquals(20L, result.getUserId());
         verify(userRepository, times(1)).findById(20L);
-         verify(userMapper, times(1)).setDto(userInfo);
+        verify(userMapper, times(1)).setDto(userInfo);
     }
 
 //    @Test
@@ -64,14 +84,13 @@ class UserServiceTest {
 //    }
 
     @Test
-    void TestDeleteById()
-    {
+    void TestDeleteById() {
         UserInfo userAuth = new UserInfo(2L, "mano",
-                "teacher", "cse",true);
+                "teacher", "cse", true);
         when(userRepository.findById(2L)).thenReturn(Optional.of(userAuth));
         String result = userService.getDelete(userAuth.getUserId());
-        assertEquals("Deleted",result);
-        verify(userRepository,times(1)).findById(2L);
+        assertEquals("Deleted", result);
+        verify(userRepository, times(1)).findById(2L);
     }
 
     @Test
@@ -124,7 +143,5 @@ class UserServiceTest {
         verify(userRepository, times(1)).findByDepartment("cse");
         verify(userMapper, times(1)).setDto(userInfo);
     }
-
-
 
 }
