@@ -66,10 +66,7 @@ class UserServiceTest {
 
         when(userRepository.findById(20L)).thenReturn(Optional.of(userInfo));
         when(userMapper.setDto(userInfo)).thenReturn(userDto);
-        UserDto result = userService.getUserById(20L);
-        System.out.println(result.getName());
-        assertEquals("Michael Johnson", result.getName());
-        assertEquals(20L, result.getUserId());
+        assertEquals("Michael Johnson", userService.getUserById(20L).getName());
         verify(userRepository, times(1)).findById(20L);
         verify(userMapper, times(1)).setDto(userInfo);
     }

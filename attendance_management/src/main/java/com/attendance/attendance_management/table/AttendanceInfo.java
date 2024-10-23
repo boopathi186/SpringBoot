@@ -1,7 +1,9 @@
 package com.attendance.attendance_management.table;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Table(name = "attendance_info")
+@AllArgsConstructor
+@NoArgsConstructor
 public class AttendanceInfo {
 
     @Id

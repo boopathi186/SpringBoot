@@ -2,14 +2,11 @@ package com.attendance.attendance_management.controller;
 
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.UserService;
-import com.attendance.attendance_management.table.UserAuth;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 
 @RestController
@@ -17,8 +14,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
 
     @GetMapping
@@ -27,9 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/csrf")
-    public CsrfToken getcsrf(HttpServletRequest request)
-    {
-        return  (CsrfToken) request.getAttribute("_csrf");
+    public CsrfToken getcsrf(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 
     @GetMapping("/id/{id}")
@@ -37,11 +33,6 @@ public class UserController {
         return userService.getUserById(Long.parseLong(id));
     }
 
-//    @PostMapping("/adduser")
-//    public UserDto  addUser(@RequestBody UserDto userDto)
-//    {
-//        return userService.addUser(userDto);
-//    }
 
     @GetMapping("/roll/{roll}")
     public List<UserDto> getUserByRoll(@PathVariable String roll) {
@@ -56,7 +47,7 @@ public class UserController {
 
     @DeleteMapping("/id/{id}")
     public String getDelete(@PathVariable String id) {
-       return userService.getDelete(Long.parseLong(id));
+        return userService.getDelete(Long.parseLong(id));
 //        return "User Deleted";
     }
 }

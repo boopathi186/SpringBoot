@@ -21,7 +21,8 @@ public class AttendanceService {
     private final UserRepository userRepository;
 
     public List<AttendanceDto> getAttendanceRecord() {
-        this.attendanceMapper.setDto();
+        List<AttendanceInfo> attendanceInfoList = attendanceRepository.findAll();
+        this.attendanceMapper.setDto(attendanceInfoList);
         return this.attendanceMapper.getDtoList();
     }
 
@@ -29,6 +30,7 @@ public class AttendanceService {
     public void postAttendanceRecord(final AttendanceDto attendanceDto) {
         AttendanceInfo attendanceInfo = this.attendanceMapper.setEntity(attendanceDto);
         this.attendanceRepository.save(attendanceInfo);
+
         if ((("absent").equalsIgnoreCase(attendanceDto.getStatus()) || ("leave").equalsIgnoreCase(attendanceDto.getStatus()))
                 && "-".equals(attendanceDto.getRecordIn()) && "-".equals(attendanceDto.getRecordOut())) {
             LeaveInfo leaveInfo = new LeaveInfo();

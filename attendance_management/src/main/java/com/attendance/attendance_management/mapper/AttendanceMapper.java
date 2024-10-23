@@ -22,9 +22,9 @@ public class AttendanceMapper {
     private final UserRepository userRepository;
     private List<AttendanceDto> dtoList = new ArrayList<>();
 
-    public void setDto() {
+    public void setDto(List<AttendanceInfo> attendanceInfoList) {
         dtoList.clear();
-        for (AttendanceInfo att : attendanceRepo.findAll()) {
+        for (AttendanceInfo att : attendanceInfoList) {
             if (att.getStatus() != null) {
                 AttendanceDto attendanceDto = new AttendanceDto();
                 attendanceDto.setAttendanceId(att.getAttendanceId());
@@ -47,7 +47,7 @@ public class AttendanceMapper {
         attendanceDetails.setRecordOut(attendanceDto.getRecordOut());
         UserInfo userInfo = userRepository.findById(attendanceDto.getUser().getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         attendanceDetails.setUser(userInfo);
-        attendanceRepo.save(attendanceDetails);
+
         return attendanceDetails;
     }
 

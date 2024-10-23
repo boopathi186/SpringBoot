@@ -22,9 +22,6 @@ public class UserAuthController {
 
     @GetMapping("/register/id/{id}")
     public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(@PathVariable Long id) {
-//        if (id == null) {
-//            throw new InputMandatoryException("input mandatory");
-//        }
         long l;
         try {
             l = Long.parseLong(String.valueOf(id));

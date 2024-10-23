@@ -19,7 +19,6 @@ public class LeaveService {
 
     private final LeaveRepository leaveRepository;
     private final LeaveMapper leaveMapper;
-    private final UserRepository userRepository;
 
     public List<LeaveDto> getLeaveData() {
         final List<LeaveDto> leaveDtoList = new ArrayList<>();
@@ -39,10 +38,7 @@ public class LeaveService {
 //    }
     public LeaveDto getRecordById(final int id) {
         Optional<LeaveInfo> leaveInfoOptional = leaveRepository.findById((long) id);
-        if (!leaveInfoOptional.isPresent()) {
-            return null;
-        }
-        return leaveMapper.setDto(leaveInfoOptional.get());
+        return leaveInfoOptional.map(leaveMapper::setDto).orElse(null);
     }
 
 
@@ -68,10 +64,5 @@ public class LeaveService {
 
     public void getDelete(final Long id) {
         this.leaveRepository.deleteById(id);
-    }
-
-
-    public void addAbsentForm(final LeaveInfo leaveInfo) {
-        this.leaveRepository.save(leaveInfo);
     }
 }
