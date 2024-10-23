@@ -1,5 +1,6 @@
 package com.attendance.attendance_management.dto;
 
+import com.attendance.attendance_management.table.UserAuth;
 import lombok.*;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public class ApiResponse<T> {
     private String executionTime;
     private T response;
 
+    public ApiResponse(List<UserAuth> userList, String success) {
+    }
 }

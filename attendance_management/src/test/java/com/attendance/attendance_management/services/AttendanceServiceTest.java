@@ -10,6 +10,7 @@ import com.attendance.attendance_management.table.UserInfo;
 import lombok.experimental.ExtensionMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
