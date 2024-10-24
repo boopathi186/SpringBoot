@@ -16,12 +16,12 @@ class AttendanceController {
 
     @GetMapping
     public List<AttendanceDto> getAttendanceRecord() {
-        return attendanceService.getAttendanceRecord();
+        return this.attendanceService.getAttendanceRecord();
     }
 
     @PostMapping("/addattendance")
     public String addAttendanceRecord(@RequestBody AttendanceDto attendanceDto) {
-        attendanceService.postAttendanceRecord(attendanceDto);
+        this.attendanceService.postAttendanceRecord(attendanceDto);
         return "Attendance record added successfully";
     }
 

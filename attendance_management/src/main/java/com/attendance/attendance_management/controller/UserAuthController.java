@@ -17,7 +17,7 @@ public class UserAuthController {
 
     @GetMapping("/register")
     public ResponseEntity<ApiResponse<List<UserAuth>>> getRegisterUser() {
-        return authService.getRegisterUser();
+        return this.authService.getRegisterUser();
     }
 
     @GetMapping("/register/id/{id}")
@@ -31,24 +31,24 @@ public class UserAuthController {
         if (l < 1) {
             throw new InvalidException("input mismatch");
         }
-        return authService.getRegisterById(l);
+        return this.authService.getRegisterById(l);
 
     }
 
     @PostMapping("/addregister")
     public String registerUser(@RequestBody UserAuth user) {
-        return authService.registerUser(user);
+        return this.authService.registerUser(user);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserAuth userAuth) {
-        return authService.verifyLogin(userAuth);
+        return this.authService.verifyLogin(userAuth);
     }
 
 
     @DeleteMapping("/register/id/{id}")
     public String getDelete(@PathVariable String id) {
-        return authService.getDelete(Long.parseLong(id));
+        return this.authService.getDelete(Long.parseLong(id));
 
     }
 }

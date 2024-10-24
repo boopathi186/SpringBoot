@@ -3,9 +3,7 @@ package com.attendance.attendance_management.services;
 import com.attendance.attendance_management.dto.LeaveDto;
 import com.attendance.attendance_management.mapper.LeaveMapper;
 import com.attendance.attendance_management.repository.LeaveRepository;
-import com.attendance.attendance_management.repository.UserRepository;
 import com.attendance.attendance_management.table.LeaveInfo;
-import com.attendance.attendance_management.table.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +35,8 @@ public class LeaveService {
 //
 //    }
     public LeaveDto getRecordById(final int id) {
-        Optional<LeaveInfo> leaveInfoOptional = leaveRepository.findById((long) id);
-        return leaveInfoOptional.map(leaveMapper::setDto).orElse(null);
+        Optional<LeaveInfo> leaveInfoOptional = this.leaveRepository.findById((long) id);
+        return leaveInfoOptional.map(this.leaveMapper::setDto).orElse(null);
     }
 
 
@@ -49,10 +47,10 @@ public class LeaveService {
 //    }
     public List<LeaveDto> getRecordByDate(final String date) {
 
-        List<LeaveInfo> leaveInfoList = leaveRepository.findByLeaveDate(date);
+        List<LeaveInfo> leaveInfoList = this.leaveRepository.findByLeaveDate(date);
         List<LeaveDto> leaveDtoList = new ArrayList<>();
         for (LeaveInfo leaveInfo : leaveInfoList) {
-            leaveDtoList.add(leaveMapper.setDto(leaveInfo));
+            leaveDtoList.add(this.leaveMapper.setDto(leaveInfo));
         }
 
         return leaveDtoList;

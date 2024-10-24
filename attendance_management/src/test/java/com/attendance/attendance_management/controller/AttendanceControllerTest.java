@@ -39,22 +39,22 @@ class AttendanceControllerTest {
 
     @Test
     void getAttendanceRecord() {
-        List<AttendanceDto> attendanceList = Collections.singletonList(attendanceDto);
-        when(attendanceService.getAttendanceRecord()).thenReturn(attendanceList);
-        List<AttendanceDto> result = attendanceController.getAttendanceRecord();
+        List<AttendanceDto> attendanceList = Collections.singletonList(this.attendanceDto);
+        when(this.attendanceService.getAttendanceRecord()).thenReturn(attendanceList);
+        List<AttendanceDto> result = this.attendanceController.getAttendanceRecord();
 
         assertEquals(1, result.size());
-        assertEquals(attendanceDto, result.get(0));
-        verify(attendanceService, times(1)).getAttendanceRecord();
+        assertEquals(this.attendanceDto, result.get(0));
+        verify(this.attendanceService, times(1)).getAttendanceRecord();
     }
 
     @Test
     void addAttendanceRecord() {
 
-        doNothing().when(attendanceService).postAttendanceRecord(attendanceDto);
+        doNothing().when(this.attendanceService).postAttendanceRecord(this.attendanceDto);
         String expectedResponse = "Attendance record added successfully";
-        String response = attendanceController.addAttendanceRecord(attendanceDto);
+        String response = this.attendanceController.addAttendanceRecord(this.attendanceDto);
         assertEquals(expectedResponse, response);
-        verify(attendanceService, times(1)).postAttendanceRecord(attendanceDto);
+        verify(this.attendanceService, times(1)).postAttendanceRecord(this.attendanceDto);
     }
 }

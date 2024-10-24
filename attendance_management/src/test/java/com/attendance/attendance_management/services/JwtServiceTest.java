@@ -34,7 +34,7 @@ class JwtServiceTest {
         token = Jwts.builder()
                 .subject("john")
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(
                         SignatureAlgorithm.HS256, secretKey
                 ).compact();
@@ -42,30 +42,30 @@ class JwtServiceTest {
 
     @Test
     void TestGetToken() {
-        String generatedToken = jwtService.getToken("john");
+        String generatedToken = this.jwtService.getToken("john");
         assertNotNull(generatedToken);
         assertFalse(generatedToken.isEmpty());
     }
 
     @Test
     void TestExtractUserName() {
-        String extractedUsername = jwtService.extractUserName(token);
-        assertEquals("john", extractedUsername); // should match the subject used in token
+        String extractedUsername = this.jwtService.extractUserName(token);
+        assertEquals("john", extractedUsername);
     }
 
     @Test
     void TestValidateToken() {
-        when(userDetails.getUsername()).thenReturn("john");
-        boolean isValid = jwtService.validateToken(token, userDetails);
+        when(this.userDetails.getUsername()).thenReturn("john");
+        boolean isValid = this.jwtService.validateToken(token, this.userDetails);
         assertTrue(isValid);
     }
 
     @Test
-    void TestValidateTokenWithExpiredToken() {
+    void TestValidateExpiredToken() {
         String expiredToken = Jwts.builder()
                 .subject("john")
-                .issuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 11)) // 11 hours ago
-                .expiration(new Date(System.currentTimeMillis() - 1000 * 60 * 60)) // expired 1 hour ago
+                .issuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 120))
+                .expiration(new Date(System.currentTimeMillis() - 1000 * 60 * 60))
                 .signWith(
                         SignatureAlgorithm.HS256, secretKey
                 ).compact();

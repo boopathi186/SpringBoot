@@ -36,7 +36,7 @@ public class UserAuth implements UserDetails {
         this.userId = userAuth.userId;
         this.userName = userAuth.userName;
         this.password = userAuth.password;
-        this.isActive=userAuth.isActive;
+        this.isActive = userAuth.isActive;
     }
 
 

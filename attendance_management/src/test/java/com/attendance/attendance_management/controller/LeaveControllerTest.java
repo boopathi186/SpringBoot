@@ -48,46 +48,46 @@ class LeaveControllerTest {
 
     @Test
     void getLeaveData() {
-        List<LeaveDto> leaveList = Collections.singletonList(leaveDto);
-        when(leaveService.getLeaveData()).thenReturn(leaveList);
-        List<LeaveDto> result = leaveController.getLeaveData();
+        List<LeaveDto> leaveList = Collections.singletonList(this.leaveDto);
+        when(this.leaveService.getLeaveData()).thenReturn(leaveList);
+        List<LeaveDto> result = this.leaveController.getLeaveData();
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(leaveDto, result.getFirst());
+        assertEquals(this.leaveDto, result.getFirst());
     }
 
     @Test
     void getRecordById() {
-        when(leaveService.getRecordById(1)).thenReturn(leaveDto);
-        LeaveDto result = leaveController.getRecordById("1");
+        when(this.leaveService.getRecordById(1)).thenReturn(this.leaveDto);
+        LeaveDto result = this.leaveController.getRecordById("1");
         assertNotNull(result);
-        assertEquals(leaveDto, result);
+        assertEquals(this.leaveDto, result);
     }
 
     @Test
     void getRecordByDate() {
-        List<LeaveDto> leaveList = Collections.singletonList(leaveDto);
-        when(leaveService.getRecordByDate("2024-10-01")).thenReturn(leaveList);
+        List<LeaveDto> leaveList = Collections.singletonList(this.leaveDto);
+        when(this.leaveService.getRecordByDate("2024-10-01")).thenReturn(leaveList);
 
-        List<LeaveDto> result = leaveController.getRecordByDate("2024-10-01");
+        List<LeaveDto> result = this.leaveController.getRecordByDate("2024-10-01");
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(leaveDto, result.getFirst());
+        assertEquals(this.leaveDto, result.getFirst());
     }
 
     @Test
     void addLeaveForm() {
 
-        leaveController.addLeaveForm(leaveInfo);
-        verify(leaveService, times(1)).addLeaveForm(leaveInfo);
+        this.leaveController.addLeaveForm(this.leaveInfo);
+        verify(leaveService, times(1)).addLeaveForm(this.leaveInfo);
     }
 
     @Test
     void getDelete() {
 
-        String result = leaveController.getDelete(1L);
+        String result = this.leaveController.getDelete(1L);
         assertEquals("Deleted", result);
-        verify(leaveService, times(1)).getDelete(1L);
+        verify(this.leaveService, times(1)).getDelete(1L);
     }
 }

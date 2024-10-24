@@ -29,21 +29,21 @@ public class UserAuthService {
 
     public String registerUser(UserAuth user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        userAuthRepository.save(user);
+        this.userAuthRepository.save(user);
         return "Success";
     }
 
     public ResponseEntity<ApiResponse<List<UserAuth>>> getRegisterUser() {
 
-        List<UserAuth> userAuth = userAuthRepository.findAll();
+        List<UserAuth> userAuth = this.userAuthRepository.findAll();
         ApiResponse<List<UserAuth>> response =
                 new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
-    public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(long id) {
-        UserAuth userAuth = userAuthRepository.findById(id)
+    public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(final long id) {
+        UserAuth userAuth = this.userAuthRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         ApiResponse<UserAuth> response =
                 new ApiResponse<>(HttpStatus.OK.value(), "success", "User found", null, System.currentTimeMillis(), "0 ms", userAuth);
@@ -62,9 +62,9 @@ public class UserAuthService {
 //    }
 
 
-    public String verifyLogin(UserAuth userAuth) {
+    public String verifyLogin(final UserAuth userAuth) {
 
-        UserAuth user = userAuthRepository.findByUserName(userAuth.getUsername());
+        UserAuth user = this.userAuthRepository.findByUserName(userAuth.getUsername());
         try {
             if (user == null) {
                 throw new UserNotFoundException("User not found");
@@ -76,11 +76,11 @@ public class UserAuthService {
             if (!encoder.matches(userAuth.getPassword(), user.getPassword())) {
                 throw new InputMismatchException("Invalid username or password.");
             }
-            Authentication authentication = authenticationManager.authenticate(
+            Authentication authentication = this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword())
             );
             if (authentication.isAuthenticated()) {
-                return jwtService.getToken(userAuth.getUsername());
+                return this.jwtService.getToken(userAuth.getUsername());
             }
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());
@@ -94,13 +94,13 @@ public class UserAuthService {
 
     @Transactional
     public String getDelete(final long id) {
-        Optional<UserAuth> userInfoOpt = userAuthRepository.findById(id);
+        Optional<UserAuth> userInfoOpt = this.userAuthRepository.findById(id);
         if (userInfoOpt.isPresent()) {
             UserAuth userAuth = userInfoOpt.get();
             if (!userAuth.getIsActive()) {
                 return "No match found";
             } else {
-                userAuthRepository.softDelete(id);
+                this.userAuthRepository.softDelete(id);
                 return "Deleted";
             }
         } else {

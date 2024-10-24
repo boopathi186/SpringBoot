@@ -43,7 +43,7 @@ public class UserService {
 //        UserDto userDto = new UserDto();
 //        return  userDto;
         Optional<UserInfo> userInfo = this.userRepository.findById(id);
-        return userInfo.map(userMapper::setDto).orElse(null);
+        return userInfo.map(this.userMapper::setDto).orElse(null);
     }
 
 
@@ -52,33 +52,33 @@ public class UserService {
 //        return userDtoList.stream()
 //                .filter(user -> user.getRoll().equals(roll))
 //                .collect(Collectors.toList());
-        List<UserInfo> userInfos = userRepository.findByRoll(roll);
+        List<UserInfo> userInfos = this.userRepository.findByRoll(roll);
         List<UserDto> userDtoList = new ArrayList<>();
         for (UserInfo userInfo : userInfos) {
-            userDtoList.add(userMapper.setDto(userInfo));
+            userDtoList.add(this.userMapper.setDto(userInfo));
         }
 
         return userDtoList;
     }
 
     public List<UserDto> getUserByDepartment(final String department) {
-        List<UserInfo> userInfos = userRepository.findByDepartment(department);
+        List<UserInfo> userInfos = this.userRepository.findByDepartment(department);
         List<UserDto> userDtoList = new ArrayList<>();
         for (UserInfo userInfo : userInfos) {
-            userDtoList.add(userMapper.setDto(userInfo));
+            userDtoList.add(this.userMapper.setDto(userInfo));
         }
         return userDtoList;
     }
 
     @Transactional
     public String getDelete(final long id) {
-        Optional<UserInfo> userInfoOpt = userRepository.findById(id);
+        Optional<UserInfo> userInfoOpt = this.userRepository.findById(id);
         if (userInfoOpt.isPresent()) {
             UserInfo userInfo = userInfoOpt.get();
             if (!userInfo.getIsActive()) {
                 return "No match found";
             } else {
-                userRepository.softDelete(id);
+                this.userRepository.softDelete(id);
                 return "Deleted";
             }
         } else {

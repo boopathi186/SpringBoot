@@ -17,26 +17,26 @@ public class LeaveController {
 
     @GetMapping
     public List<LeaveDto> getLeaveData() {
-        return leaveService.getLeaveData();
+        return this.leaveService.getLeaveData();
     }
 
     @GetMapping("/id/{id}")
     public LeaveDto getRecordById(@PathVariable String id) {
-        return leaveService.getRecordById(Integer.parseInt(id));
+        return this.leaveService.getRecordById(Integer.parseInt(id));
     }
 
     @GetMapping("/{date}")
     public List<LeaveDto> getRecordByDate(@PathVariable String date) {
-        return leaveService.getRecordByDate(date);
+        return this.leaveService.getRecordByDate(date);
     }
 
     public void addLeaveForm(LeaveInfo data) {
-        leaveService.addLeaveForm(data);
+        this.leaveService.addLeaveForm(data);
     }
 
     @DeleteMapping("/id/{id}")
     public String getDelete(@PathVariable Long id) {
-        leaveService.getDelete(id);
+        this.leaveService.getDelete(id);
         return "Deleted";
     }
 }

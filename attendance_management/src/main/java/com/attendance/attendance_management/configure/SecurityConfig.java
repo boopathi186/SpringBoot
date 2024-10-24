@@ -11,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,35 +21,36 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class   SecurityConfig {
+public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-  private final JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-    
+
     @Bean
     public SecurityFilterChain securityConfigure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for APIs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/login", "/addregister") // Permit these endpoints
+                        .requestMatchers(HttpMethod.POST, "/login", "/register") // Permit these endpoints
                         .permitAll()
                         .anyRequest().authenticated()) // All other requests must be authenticated
                 .httpBasic(Customizer.withDefaults()) // Use HTTP Basic authentication
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);// Ensure stateless session
+                .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);// Ensure stateless session
 
         return httpSecurity.build();
     }
 
     // to check the credentials
     @Bean
-    public AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider( BCryptPasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService); // to fetch the userDetailsService to authenticate
+        provider.setUserDetailsService(this.userDetailsService); // to fetch the userDetailsService to authenticate
         provider.setPasswordEncoder(passwordEncoder);
 
         return provider;

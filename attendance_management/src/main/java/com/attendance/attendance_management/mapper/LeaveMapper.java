@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LeaveMapper {
 
-    public LeaveDto setDto(LeaveInfo leaveInfo) {
+    public LeaveDto setDto(final LeaveInfo leaveInfo) {
         LeaveDto leaveDto = new LeaveDto();
         leaveDto.setLeaveId(leaveInfo.getLeaveId());
         leaveDto.setLeaveDate(leaveInfo.getLeaveDate());

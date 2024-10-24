@@ -38,7 +38,7 @@ public class AttendanceMapper {
         }
     }
 
-    public AttendanceInfo setEntity(AttendanceDto attendanceDto) {
+    public AttendanceInfo setEntity(final AttendanceDto attendanceDto) {
         AttendanceInfo attendanceDetails = new AttendanceInfo();
         attendanceDetails.setAttendanceId(attendanceDto.getAttendanceId());
         attendanceDetails.setDate(attendanceDto.getDate());

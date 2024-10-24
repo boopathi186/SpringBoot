@@ -34,22 +34,22 @@ class MyUserDetailServiceTest {
     void loadUserByUsername_userFound() {
 
         String userName = "john";
-        userAuth.setUserName(userName);
-        when(userAuthRepository.findByUserName(userName)).thenReturn(userAuth);
-        UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
+        this.userAuth.setUserName(userName);
+        when(this.userAuthRepository.findByUserName(userName)).thenReturn(this.userAuth);
+        UserDetails userDetails = this.myUserDetailService.loadUserByUsername(userName);
 
         assertNotNull(userDetails);
-        assertEquals(userAuth.getUsername(), userDetails.getUsername());
-        verify(userAuthRepository, times(1)).findByUserName(userName);
+        assertEquals(this.userAuth.getUsername(), userDetails.getUsername());
+        verify(this.userAuthRepository, times(1)).findByUserName(userName);
     }
 
     @Test
     void loadUserByUsername_userNotFound() {
         String username = "nonExistentUser";
-        when(userAuthRepository.findByUserName(username)).thenReturn(null);
+        when(this.userAuthRepository.findByUserName(username)).thenReturn(null);
         assertThrows(UserNotFoundException.class, () -> {
-            myUserDetailService.loadUserByUsername(username);
+            this.myUserDetailService.loadUserByUsername(username);
         });
-        verify(userAuthRepository, times(1)).findByUserName(username);
+        verify(this.userAuthRepository, times(1)).findByUserName(username);
     }
 }

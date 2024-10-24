@@ -13,7 +13,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
 
-
     List<UserInfo> findByDepartment(String department);
 
     List<UserInfo> findByRoll(String roll);

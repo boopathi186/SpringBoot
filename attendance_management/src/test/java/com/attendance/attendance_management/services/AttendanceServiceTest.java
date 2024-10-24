@@ -1,16 +1,13 @@
 package com.attendance.attendance_management.services;
 
 import com.attendance.attendance_management.dto.AttendanceDto;
-import com.attendance.attendance_management.dto.LeaveDto;
 import com.attendance.attendance_management.mapper.AttendanceMapper;
 import com.attendance.attendance_management.repository.AttendanceRepository;
 import com.attendance.attendance_management.table.AttendanceInfo;
-import com.attendance.attendance_management.table.LeaveInfo;
 import com.attendance.attendance_management.table.UserInfo;
 import lombok.experimental.ExtensionMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -19,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtensionMethod(MockitoExtension.class)
@@ -49,25 +46,25 @@ class AttendanceServiceTest {
     @Test
     void getAttendanceRecord() {
         List<AttendanceInfo> attendanceInfoList = new ArrayList<>();
-        attendanceInfoList.add(attendanceInfo);
+        attendanceInfoList.add(this.attendanceInfo);
 
         List<AttendanceDto> attendanceDtoList = new ArrayList<>();
         attendanceDtoList.add(attendanceDto);
 
-        when(attendanceRepository.findAll()).thenReturn(attendanceInfoList);
-        when(attendanceMapper.getDtoList()).thenReturn(attendanceDtoList);
-        assertEquals(attendanceDtoList, attendanceService.getAttendanceRecord());
-        verify(attendanceRepository, times(1)).findAll();
-        verify(attendanceMapper, times(1)).getDtoList();
+        when(this.attendanceRepository.findAll()).thenReturn(attendanceInfoList);
+        when(this.attendanceMapper.getDtoList()).thenReturn(attendanceDtoList);
+        assertEquals(attendanceDtoList, this.attendanceService.getAttendanceRecord());
+        verify(this.attendanceRepository, times(1)).findAll();
+        verify(this.attendanceMapper, times(1)).getDtoList();
     }
 
 
     @Test
     void postAttendanceRecord() {
 
-        when(attendanceMapper.setEntity(attendanceDto)).thenReturn(attendanceInfo);
-        attendanceService.postAttendanceRecord(attendanceDto);
-        verify(attendanceRepository, times(1)).save(attendanceInfo);
+        when(this.attendanceMapper.setEntity(attendanceDto)).thenReturn(this.attendanceInfo);
+        this.attendanceService.postAttendanceRecord(this.attendanceDto);
+        verify(this.attendanceRepository, times(1)).save(this.attendanceInfo);
     }
 
 }

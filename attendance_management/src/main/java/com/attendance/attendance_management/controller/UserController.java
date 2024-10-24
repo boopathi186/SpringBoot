@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     public List<UserDto> getUser() {
-        return userService.getUser();
+        return this.userService.getUser();
     }
 
     @GetMapping("/csrf")
@@ -30,23 +30,23 @@ public class UserController {
 
     @GetMapping("/id/{id}")
     public UserDto getUserById(@PathVariable String id) {
-        return userService.getUserById(Long.parseLong(id));
+        return this.userService.getUserById(Long.parseLong(id));
     }
 
 
     @GetMapping("/roll/{roll}")
     public List<UserDto> getUserByRoll(@PathVariable String roll) {
-        return userService.getUserByRoll(roll);
+        return this.userService.getUserByRoll(roll);
     }
 
     @GetMapping("/department/{department}")
     public List<UserDto> getUserByDepartment(@PathVariable String department) {
-        return userService.getUserByDepartment(department);
+        return this.userService.getUserByDepartment(department);
     }
 
 
     @DeleteMapping("/id/{id}")
     public String getDelete(@PathVariable String id) {
-        return userService.getDelete(Long.parseLong(id));
+        return this.userService.getDelete(Long.parseLong(id));
     }
 }

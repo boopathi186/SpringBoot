@@ -1,11 +1,8 @@
 package com.attendance.attendance_management.mapper;
 
-import com.attendance.attendance_management.dto.LeaveDto;
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.repository.UserRepository;
-import com.attendance.attendance_management.table.LeaveInfo;
 import com.attendance.attendance_management.table.UserInfo;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -21,12 +18,11 @@ import java.util.List;
 public class UserMapper {
     private final UserRepository userRepository;
     private List<UserDto> userDto = new ArrayList<>();
-    public UserDto setDto(UserInfo userInfo) {
-        if(userInfo==null)
-        {
+
+    public UserDto setDto(final UserInfo userInfo) {
+        if (userInfo == null) {
             throw new NullPointerException("userInfo is null");
-        }
-        else {
+        } else {
             UserDto userDto1 = new UserDto();
             userDto1.setUserId(userInfo.getUserId());
             userDto1.setRoll(userInfo.getRoll());
