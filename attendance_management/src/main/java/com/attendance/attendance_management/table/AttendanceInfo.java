@@ -25,6 +25,7 @@ public class AttendanceInfo {
     private String date;
     private String RecordIn;
     private String RecordOut;
-    private String Status;
+    private String status;
+    private String reason;
 
 }

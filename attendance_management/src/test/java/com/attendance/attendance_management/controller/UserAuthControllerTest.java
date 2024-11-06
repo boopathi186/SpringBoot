@@ -87,7 +87,7 @@ class UserAuthControllerTest {
 
         String message = "Login successful";
         when(this.authService.verifyLogin(this.userAuth)).thenReturn(message);
-        String actualMessage = this.userAuthController.login(this.userAuth);
+        String actualMessage = String.valueOf(this.userAuthController.login(this.userAuth));
         assertEquals(message, actualMessage);
     }
 

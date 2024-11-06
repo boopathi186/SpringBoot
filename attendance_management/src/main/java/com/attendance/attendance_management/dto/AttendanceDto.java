@@ -17,6 +17,8 @@ public class AttendanceDto {
     private UserInfo user;
     private String RecordOut;
     private String Status;
+    private  String leaveReason;
+
 
 }
 

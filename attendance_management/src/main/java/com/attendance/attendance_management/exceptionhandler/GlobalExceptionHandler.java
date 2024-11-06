@@ -3,6 +3,7 @@ package com.attendance.attendance_management.exceptionhandler;
 import com.attendance.attendance_management.dto.ApiResponse;
 import com.attendance.attendance_management.exceptionhandler.customexceptions.InputMandatoryException;
 import com.attendance.attendance_management.exceptionhandler.customexceptions.InvalidException;
+import com.attendance.attendance_management.exceptionhandler.customexceptions.UserAlreadyExistException;
 import com.attendance.attendance_management.exceptionhandler.customexceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ApiResponse<String>> handleUserNotFoundException(UserNotFoundException ex) {
+        return createApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<ApiResponse<String>> handleUserAlreadyExistException(UserAlreadyExistException ex) {
         return createApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 

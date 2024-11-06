@@ -73,7 +73,10 @@ public class UserAuthService {
                 throw new InvalidException("User account is inactive.");
             }
 
-            if (!encoder.matches(userAuth.getPassword(), user.getPassword())) {
+            if (
+                    !encoder.matches(userAuth.getPassword(), user.getPassword())
+            ) {
+                System.out.println(userAuth.getPassword().equals(user.getPassword()));
                 throw new InputMismatchException("Invalid username or password.");
             }
             Authentication authentication = this.authenticationManager.authenticate(

@@ -20,10 +20,9 @@ import java.util.List;
 public class AttendanceMapper {
     private final AttendanceRepository attendanceRepo;
     private final UserRepository userRepository;
-    private List<AttendanceDto> dtoList = new ArrayList<>();
 
-    public void setDto(List<AttendanceInfo> attendanceInfoList) {
-        dtoList.clear();
+    public List<AttendanceDto> setDto(List<AttendanceInfo> attendanceInfoList) {
+        List<AttendanceDto> dtoList = new ArrayList<>();
         for (AttendanceInfo att : attendanceInfoList) {
             if (att.getStatus() != null) {
                 AttendanceDto attendanceDto = new AttendanceDto();
@@ -33,9 +32,11 @@ public class AttendanceMapper {
                 attendanceDto.setStatus(att.getStatus());
                 attendanceDto.setDate(att.getDate());
                 attendanceDto.setUser(att.getUser());
+                attendanceDto.setLeaveReason(att.getReason());
                 dtoList.add(attendanceDto);
             }
         }
+        return dtoList;
     }
 
     public AttendanceInfo setEntity(final AttendanceDto attendanceDto) {
@@ -45,11 +46,10 @@ public class AttendanceMapper {
         attendanceDetails.setStatus(attendanceDto.getStatus());
         attendanceDetails.setRecordIn(attendanceDto.getRecordIn());
         attendanceDetails.setRecordOut(attendanceDto.getRecordOut());
+        attendanceDetails.setReason(attendanceDto.getLeaveReason());
         UserInfo userInfo = userRepository.findById(attendanceDto.getUser().getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
         attendanceDetails.setUser(userInfo);
 
         return attendanceDetails;
     }
-
 }
-

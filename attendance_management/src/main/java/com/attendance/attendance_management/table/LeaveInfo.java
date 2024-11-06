@@ -23,5 +23,5 @@ public class LeaveInfo {
     private UserInfo user;
     @Column(name = "leave_date")
     private String leaveDate;
-
+    private String  leaveReason;
 }

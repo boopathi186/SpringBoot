@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/leaverecord")
 public class LeaveController {
@@ -29,6 +30,7 @@ public class LeaveController {
     public List<LeaveDto> getRecordByDate(@PathVariable String date) {
         return this.leaveService.getRecordByDate(date);
     }
+
 
     public void addLeaveForm(LeaveInfo data) {
         this.leaveService.addLeaveForm(data);

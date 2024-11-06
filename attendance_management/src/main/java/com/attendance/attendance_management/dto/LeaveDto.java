@@ -15,5 +15,6 @@ public class LeaveDto {
     private Long leaveId;
     private UserInfo user;
     private String leaveDate;
+    private String reason;
 
 }

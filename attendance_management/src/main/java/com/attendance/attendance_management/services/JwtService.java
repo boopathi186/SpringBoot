@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -22,7 +23,7 @@ import java.util.function.Function;
 @NoArgsConstructor
 public class JwtService {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:defaultSecretKey}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
@@ -56,11 +57,11 @@ public class JwtService {
                 ).compact();
 
     }
-
+    //to create secure sign key
     private SecretKey getkey() {
         byte[] byteSec = Decoders.BASE64.decode(secretKey);
         //System.out.println("decode  "+Keys.hmacShaKeyFor(byteSec));
-        return Keys.hmacShaKeyFor(byteSec);   //to create secure sign key
+        return Keys.hmacShaKeyFor(byteSec);
     }
 
 

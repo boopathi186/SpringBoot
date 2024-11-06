@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserAuthController {
     private final UserAuthService authService;
 
@@ -42,7 +44,8 @@ public class UserAuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody UserAuth userAuth) {
-        return this.authService.verifyLogin(userAuth);
+        return  this.authService.verifyLogin(userAuth);
+
     }
 
 

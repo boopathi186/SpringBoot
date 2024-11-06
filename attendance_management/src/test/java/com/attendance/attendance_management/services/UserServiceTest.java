@@ -88,6 +88,16 @@ class UserServiceTest {
         verify(this.userRepository, times(1)).findById(2L);
     }
 
+//    @Test
+//    void TestNoDeleteById() {
+//        UserInfo userAuth = new UserInfo(2L, "mano",
+//                "teacher", "cse", true);
+//        when(this.userRepository.findById(2L)).thenReturn(Optional.empty());
+//        String result = this.userService.getDelete(userAuth.getUserId());
+//        assertEquals("No match found", result);
+//        verify(this.userRepository, times(1)).findById(2L);
+//    }
+
     @Test
     void TestGetUserByRoll() {
         UserInfo userInfo = new UserInfo();
