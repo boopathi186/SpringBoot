@@ -19,7 +19,7 @@ public class AttendanceInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserInfo user;
     private String date;

@@ -27,4 +27,6 @@ public class UserInfo {
     private String department;
     @Column(name = "is_active")
     private Boolean isActive = true;
+    @Column(name = "is_marked")
+    private Boolean isMarked = true;
 }

@@ -45,6 +45,11 @@ public class UserController {
     }
 
 
+    @GetMapping("/unmarked")
+    public List<UserDto> getUnMarkedAttendance(UserDto userDto) {
+        return this.userService.getUnMarkedAttendance(userDto);
+    }
+
     @DeleteMapping("/id/{id}")
     public String getDelete(@PathVariable String id) {
         return this.userService.getDelete(Long.parseLong(id));

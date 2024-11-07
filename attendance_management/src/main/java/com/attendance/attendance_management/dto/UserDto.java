@@ -17,7 +17,8 @@ public class UserDto {
     private String name;
     private String roll;
     private String department;
-    private String isActive;
+    private Boolean isActive;
+    private Boolean isMarked;
 
     @Override
     public boolean equals(Object o) {

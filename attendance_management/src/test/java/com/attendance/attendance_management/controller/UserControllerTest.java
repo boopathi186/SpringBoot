@@ -28,7 +28,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userDto = new UserDto(1L, "john", "teacher", "cse", "true");
+        userDto = new UserDto(1L, "john", "teacher", "cse","true");
     }
 
     @Test

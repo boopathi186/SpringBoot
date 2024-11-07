@@ -29,6 +29,11 @@ class AttendanceController {
         return attendanceService.getPlannedLeave();
     }
 
+    @GetMapping("/id/{id}")
+    public AttendanceDto getAttendanceById(@PathVariable Long id){
+        return attendanceService.getAttendanceById(id);
+    }
+
     @GetMapping("/sick")
     public List<AttendanceDto> getSickLeave() {
         return attendanceService.getSickLeave();
@@ -45,11 +50,16 @@ class AttendanceController {
         return attendanceService.getRecordsByPresent();
     }
 
-
     @PostMapping("/addattendance")
     public String addAttendanceRecord(@RequestBody AttendanceDto attendanceDto) {
         this.attendanceService.postAttendanceRecord(attendanceDto);
         return "Attendance record added successfully";
+    }
+
+    @DeleteMapping("/id/{id}")
+    public String getDeleteById(@PathVariable Long id)
+    {
+        return  this.attendanceService.getDeleteById(id);
     }
 
 

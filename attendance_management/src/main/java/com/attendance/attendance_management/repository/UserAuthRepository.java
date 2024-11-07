@@ -13,6 +13,6 @@ public interface UserAuthRepository extends JpaRepository<UserAuth, Long> {
     UserAuth findByUserName(String userName);
 
     @Modifying
-    @Query("UPDATE UserAuth u SET u.isActive = false WHERE u.userId = :userId")
+    @Query("UPDATE UserAuth u SET u.isActive = true WHERE u.userId = :userId")
     void softDelete(@Param("userId") Long userId);
 }

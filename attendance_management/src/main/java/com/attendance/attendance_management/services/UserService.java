@@ -19,8 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserInfo userInfo;
-    private final UserAuthRepository userAuthRepository;
+
 
     public List<UserDto> getUser() {
         final List<UserDto> userDtoList = new ArrayList<>();
@@ -84,6 +83,17 @@ public class UserService {
         } else {
             return "No match found";
         }
+    }
+
+
+    public List<UserDto> getUnMarkedAttendance(UserDto userDto) {
+        List<UserInfo>userInfos=this.userRepository.findByIsMarked(true);
+        List<UserDto>userDtoList=new ArrayList<>();
+        for(UserInfo userInfo : userInfos)
+        {
+                userDtoList.add(userMapper.setDto(userInfo));
+        }
+        return userDtoList;
     }
 }
 

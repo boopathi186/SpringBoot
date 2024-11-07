@@ -21,22 +21,22 @@ public class AttendanceMapper {
     private final AttendanceRepository attendanceRepo;
     private final UserRepository userRepository;
 
-    public List<AttendanceDto> setDto(List<AttendanceInfo> attendanceInfoList) {
-        List<AttendanceDto> dtoList = new ArrayList<>();
-        for (AttendanceInfo att : attendanceInfoList) {
-            if (att.getStatus() != null) {
-                AttendanceDto attendanceDto = new AttendanceDto();
-                attendanceDto.setAttendanceId(att.getAttendanceId());
-                attendanceDto.setRecordIn(att.getRecordIn());
-                attendanceDto.setRecordOut(att.getRecordOut());
-                attendanceDto.setStatus(att.getStatus());
-                attendanceDto.setDate(att.getDate());
-                attendanceDto.setUser(att.getUser());
-                attendanceDto.setLeaveReason(att.getReason());
-                dtoList.add(attendanceDto);
-            }
-        }
-        return dtoList;
+    public AttendanceDto setDto(final AttendanceInfo att) {
+                if(att.getAttendanceId()==null)
+                {
+                    throw new NullPointerException("Input cannot be null");
+                }
+                else {
+                    AttendanceDto attendanceDto = new AttendanceDto();
+                    attendanceDto.setAttendanceId(att.getAttendanceId());
+                    attendanceDto.setRecordIn(att.getRecordIn());
+                    attendanceDto.setRecordOut(att.getRecordOut());
+                    attendanceDto.setStatus(att.getStatus());
+                    attendanceDto.setDate(att.getDate());
+                    attendanceDto.setUser(att.getUser());
+                    attendanceDto.setLeaveReason(att.getReason());
+                    return attendanceDto;
+                }
     }
 
     public AttendanceInfo setEntity(final AttendanceDto attendanceDto) {

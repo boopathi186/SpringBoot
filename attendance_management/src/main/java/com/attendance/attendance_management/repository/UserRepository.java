@@ -21,4 +21,10 @@ public interface UserRepository extends JpaRepository<UserInfo, Long> {
     @Query("UPDATE UserInfo u SET u.isActive = false WHERE u.userId = :userId")
     void softDelete(@Param("userId") Long userId);
 
+    @Modifying
+    @Query("UPDATE UserInfo u SET u.isMarked = false WHERE u.userId = :userId")
+    void markAttendance(@Param("userId") Long userId);
+
+
+    List<UserInfo> findByIsMarked(boolean b);
 }
