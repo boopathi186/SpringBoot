@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
 
     List<UserInfo> findByIsMarked(boolean b);
+
+    boolean existsByUserId(Long userId);
 }

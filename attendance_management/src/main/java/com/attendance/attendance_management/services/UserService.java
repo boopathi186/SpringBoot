@@ -2,7 +2,6 @@ package com.attendance.attendance_management.services;
 
 import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.mapper.UserMapper;
-import com.attendance.attendance_management.repository.UserAuthRepository;
 import com.attendance.attendance_management.repository.UserRepository;
 import com.attendance.attendance_management.table.UserInfo;
 import jakarta.transaction.Transactional;
@@ -31,6 +30,8 @@ public class UserService {
             userDto.setRoll(user.getRoll());
             userDto.setName(user.getName());
             userDto.setUserId(user.getUserId());
+            userDto.setIsActive(user.getIsActive());
+            userDto.setIsMarked(user.getIsMarked());
             userDtoList.add(userDto);
         });
         return userDtoList;
@@ -94,6 +95,17 @@ public class UserService {
                 userDtoList.add(userMapper.setDto(userInfo));
         }
         return userDtoList;
+    }
+
+
+    public void addUser(UserDto userDto) {
+        boolean userExist = this.userRepository.existsByUserId(
+                userDto.getUserId());
+        if (userExist) {
+            throw new RuntimeException("User record already exists for the given user and date.");
+        }
+        UserInfo userInfo = this.userMapper.setEntity(userDto);
+        this.userRepository.save(userInfo);
     }
 }
 

@@ -54,7 +54,7 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    // Configure CORS to allow requests from localhost:3000
+    // allow third party URl
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

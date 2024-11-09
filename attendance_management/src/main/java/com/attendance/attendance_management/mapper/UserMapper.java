@@ -36,4 +36,14 @@ public class UserMapper {
         }
 
     }
+
+    public UserInfo setEntity(UserDto userDto) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userDto.getUserId());
+        userInfo.setName(userDto.getName());
+        userInfo.setDepartment(userDto.getDepartment());
+        userInfo.setRoll(userDto.getRoll());
+        userInfo.setIsActive(userDto.getIsActive());
+        return  userInfo;
+    }
 }

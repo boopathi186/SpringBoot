@@ -4,6 +4,7 @@ import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +24,19 @@ public class UserController {
         return this.userService.getUser();
     }
 
-    @GetMapping("/csrf")
-    public CsrfToken getcsrf(HttpServletRequest request) {
-        return (CsrfToken) request.getAttribute("_csrf");
-    }
+    @RequestMapping("/id/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+        if (id == null || id.trim().isEmpty() || id.equalsIgnoreCase("null")) {
+            return ResponseEntity.badRequest().body(null);
+        }
 
-    @GetMapping("/id/{id}")
-    public UserDto getUserById(@PathVariable String id) {
-        return this.userService.getUserById(Long.parseLong(id));
+        try {
+            long userId = Long.parseLong(id);
+            UserDto user = userService.getUserById(userId);
+            return ResponseEntity.ok(user);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 
@@ -44,6 +50,13 @@ public class UserController {
         return this.userService.getUserByDepartment(department);
     }
 
+    @PostMapping("/adduser")
+    public String addUser(@RequestBody UserDto userDto)
+    {
+        this.userService.addUser(userDto);
+        return "User Added Successfully";
+    }
+
 
     @GetMapping("/unmarked")
     public List<UserDto> getUnMarkedAttendance(UserDto userDto) {
@@ -54,4 +67,5 @@ public class UserController {
     public String getDelete(@PathVariable String id) {
         return this.userService.getDelete(Long.parseLong(id));
     }
+
 }

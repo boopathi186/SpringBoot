@@ -10,5 +10,4 @@ import java.util.List;
 public interface LeaveRepository extends JpaRepository<LeaveInfo,Long> {
     List<LeaveInfo> findByLeaveDate(String date);
 
-    List<LeaveInfo> findByLeaveReason(String reason);
 }

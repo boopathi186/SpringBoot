@@ -2,8 +2,10 @@ package com.attendance.attendance_management.controller;
 
 import com.attendance.attendance_management.dto.AttendanceDto;
 import com.attendance.attendance_management.dto.LeaveDto;
+import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.AttendanceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -29,9 +31,19 @@ class AttendanceController {
         return attendanceService.getPlannedLeave();
     }
 
-    @GetMapping("/id/{id}")
-    public AttendanceDto getAttendanceById(@PathVariable Long id){
-        return attendanceService.getAttendanceById(id);
+    @RequestMapping("/id/{id}")
+    public ResponseEntity<AttendanceDto> getAttendanceById(@PathVariable String id) {
+        if (id == null || id.trim().isEmpty() || id.equalsIgnoreCase("null")) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        try {
+            long userId = Long.parseLong(id);
+            AttendanceDto attendance = attendanceService.getAttendanceById(userId);
+            return ResponseEntity.ok(attendance);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/sick")
