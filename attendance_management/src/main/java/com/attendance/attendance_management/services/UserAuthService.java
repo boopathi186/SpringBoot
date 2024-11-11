@@ -83,7 +83,7 @@ public class UserAuthService {
                     new UsernamePasswordAuthenticationToken(userAuth.getUsername(), userAuth.getPassword())
             );
             if (authentication.isAuthenticated()) {
-                return this.jwtService.getToken(userAuth.getUsername());
+                return this.jwtService.getToken(user.getUsername(),user.getRole());
             }
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException(e.getMessage());

@@ -22,6 +22,6 @@ public class MyUserDetailService implements UserDetailsService {
         if (userAuth == null) {
             throw new UserNotFoundException("User Not Found");
         }
-        return new UserAuth(userAuth);
+        return userAuth;
     }
 }

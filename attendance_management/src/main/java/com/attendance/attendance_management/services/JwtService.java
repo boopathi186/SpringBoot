@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -45,8 +44,9 @@ public class JwtService {
     //
     //    }
 
-    public String getToken(String username) {
+    public String getToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role",role);
         return Jwts.builder().claims()
                 .add(claims)
                 .subject(username)
@@ -62,6 +62,11 @@ public class JwtService {
         byte[] byteSec = Decoders.BASE64.decode(secretKey);
         //System.out.println("decode  "+Keys.hmacShaKeyFor(byteSec));
         return Keys.hmacShaKeyFor(byteSec);
+    }
+
+    public String extractRole(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("role", String.class);
     }
 
 

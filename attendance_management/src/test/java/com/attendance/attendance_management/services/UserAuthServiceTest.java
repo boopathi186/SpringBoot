@@ -75,7 +75,7 @@ class UserAuthServiceTest {
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(this.authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-        when(this.jwtService.getToken("mano")).thenReturn("$2a$12$5.bQ.EnTuA..QWU0UgPGAeBhRQCtu4/5bEFwHrM0cs4JFpzcEirzq");
+        when(this.jwtService.getToken("mano", userAuth.getRole())).thenReturn("$2a$12$5.bQ.EnTuA..QWU0UgPGAeBhRQCtu4/5bEFwHrM0cs4JFpzcEirzq");
         String token = this.userAuthService.verifyLogin(this.userAuth);
         assertEquals("$2a$12$5.bQ.EnTuA..QWU0UgPGAeBhRQCtu4/5bEFwHrM0cs4JFpzcEirzq", token);
         verify(this.userAuthRepository, times(1)).findByUserName(this.userAuth.getUsername());

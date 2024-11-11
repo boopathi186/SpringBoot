@@ -31,18 +31,21 @@ public class UserAuth implements UserDetails {
     private String password;
     @Column(name = "is_active")
     private Boolean isActive = true;
+    @Column(name = "role")
+    private String role;
 
     public UserAuth(UserAuth userAuth) {
         this.userId = userAuth.userId;
         this.userName = userAuth.userName;
         this.password = userAuth.password;
         this.isActive = userAuth.isActive;
+        this.role = userAuth.role;
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ role));
     }
 
     @Override

@@ -39,26 +39,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityConfigure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource())) // Configure CORS
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for APIs
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/login", "/register") // Permit these endpoints
-
-                        .permitAll()
-                        .anyRequest().authenticated()) // All other requests must be authenticated
-                .httpBasic(Customizer.withDefaults()) // Use HTTP Basic authentication
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Ensure stateless session
+                        .requestMatchers(HttpMethod.POST, "/login", "/addregister").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(this.jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
 
-    // allow third party URl
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001")); // Allow localhost:3000
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://localhost:3001")); // Allow localhost:3000 and 3001
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
@@ -67,19 +64,20 @@ public class SecurityConfig {
         return source;
     }
 
-    // to check the credentials
+
     @Bean
-    public AuthenticationProvider authenticationProvider( BCryptPasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(BCryptPasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(this.userDetailsService); // to fetch the userDetailsService to authenticate
+        provider.setUserDetailsService(this.userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
 
         return provider;
     }
 
-    // to authenticate
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+
 }

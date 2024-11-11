@@ -42,7 +42,7 @@ class JwtServiceTest {
 
     @Test
     void TestGetToken() {
-        String generatedToken = this.jwtService.getToken("john");
+        String generatedToken = this.jwtService.getToken("john", userAuth.getRole());
         assertNotNull(generatedToken);
         assertFalse(generatedToken.isEmpty());
     }
