@@ -6,6 +6,7 @@ import com.attendance.attendance_management.dto.UserDto;
 import com.attendance.attendance_management.services.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -22,16 +23,19 @@ class AttendanceController {
     private final AttendanceService attendanceService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<AttendanceDto> getAttendanceRecord() {
         return this.attendanceService.getAttendanceRecord();
     }
 
     @GetMapping("/planned-leave")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<AttendanceDto> getPlannedLeave() {
         return attendanceService.getPlannedLeave();
     }
 
     @RequestMapping("/id/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<AttendanceDto> getAttendanceById(@PathVariable String id) {
         if (id == null || id.trim().isEmpty() || id.equalsIgnoreCase("null")) {
             return ResponseEntity.badRequest().body(null);
@@ -47,28 +51,33 @@ class AttendanceController {
     }
 
     @GetMapping("/sick")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<AttendanceDto> getSickLeave() {
         return attendanceService.getSickLeave();
     }
 
 
     @GetMapping("/absent")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<AttendanceDto> getAbsentRecords() {
         return attendanceService.getRecordsByAbsent();
     }
 
     @GetMapping("/present")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<AttendanceDto> getPresentRecords() {
         return attendanceService.getRecordsByPresent();
     }
 
-    @PostMapping("/addattendance")
+    @PostMapping("/add-attendance")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addAttendanceRecord(@RequestBody AttendanceDto attendanceDto) {
         this.attendanceService.postAttendanceRecord(attendanceDto);
         return "Attendance record added successfully";
     }
 
     @DeleteMapping("/id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getDeleteById(@PathVariable Long id)
     {
         return  this.attendanceService.getDeleteById(id);

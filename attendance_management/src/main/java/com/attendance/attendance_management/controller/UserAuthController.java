@@ -6,6 +6,7 @@ import com.attendance.attendance_management.services.UserAuthService;
 import com.attendance.attendance_management.table.UserAuth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class UserAuthController {
     private final UserAuthService authService;
 
     @GetMapping("/register")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<UserAuth>>> getRegisterUser() {
         return this.authService.getRegisterUser();
     }
 
     @GetMapping("/register/id/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<ApiResponse<UserAuth>> getRegisterById(@PathVariable Long id) {
         long l;
         try {
@@ -39,19 +42,17 @@ public class UserAuthController {
 
     @PostMapping("/addregister")
     public String registerUser(@RequestBody UserAuth user) {
-        return this.authService.registerUser(user);
+        return authService.registerUser(user);
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserAuth userAuth) {
-        return  this.authService.verifyLogin(userAuth);
-
+        return authService.verifyLogin(userAuth);
     }
 
-
     @DeleteMapping("/register/id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String getDelete(@PathVariable String id) {
-        return this.authService.getDelete(Long.parseLong(id));
-
+        return authService.getDelete(Long.parseLong(id));
     }
 }

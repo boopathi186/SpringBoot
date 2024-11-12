@@ -99,15 +99,10 @@ public class UserAuthService {
     public String getDelete(final long id) {
         Optional<UserAuth> userInfoOpt = this.userAuthRepository.findById(id);
         if (userInfoOpt.isPresent()) {
-            UserAuth userAuth = userInfoOpt.get();
-            if (!userAuth.getIsActive()) {
-                return "No match found";
-            } else {
-                this.userAuthRepository.softDelete(id);
-                return "Deleted";
-            }
-        } else {
-            return "No match found";
+           this.userAuthRepository.deleteById(id);
+           return  "Deleted";
         }
+            return "No match found";
+
     }
 }
